@@ -5,5 +5,6 @@ library SmaSDK;
 
 export 'src/SmaSDK_base.dart';
 export 'src/Message.dart';
+export 'src/exceptions.dart';
 
 // TODO: Export any libraries intended for clients of this package.

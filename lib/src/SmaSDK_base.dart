@@ -1,5 +1,9 @@
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+
+import './Message.dart';
+import './exceptions.dart';
 
 class SmaSDK {
   final String baseUrl;
@@ -25,18 +29,41 @@ class SmaSDK {
 
     return Token(
         accessToken: tokenResponse["access_token"],
-        refreshToken: tokenResponse["refresh_token"],
         expiresAt: now
     );
   }
 
+  Future<Message> storeMessage(Message message) async {
+    http.Response response = await http.post("${baseUrl}/api/messages", body: {
+      "message": message.message,
+      "email": message.email
+    },
+        headers: {
+          "authorization": "Bearer ${token.accessToken}",
+          "accept": "application/json"
+        }
+    );
 
+    dynamic messageResponse = jsonDecode(response.body);
+
+    if (response.statusCode == 401) {
+      throw UnauthorizedException(messageResponse["message"]);
+    }
+
+    if(response.statusCode < 200 || response.statusCode > 299) {
+      throw HttpException(response.statusCode, messageResponse["message"]);
+    }
+
+    message.url = messageResponse["decrypt_route"];
+    message.password = messageResponse["password"];
+
+    return message;
+  }
 }
 
 class Token {
   final String accessToken;
-  final String refreshToken;
   final DateTime expiresAt;
 
-  Token({this.accessToken, this.refreshToken, this.expiresAt});
+  Token({this.accessToken, this.expiresAt});
 }
