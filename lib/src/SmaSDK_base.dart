@@ -57,6 +57,11 @@ class SmaSDK {
     message.url = messageResponse["decrypt_route"];
     message.password = messageResponse["password"];
 
+    String expirationDate = messageResponse["expiration_date"];
+    List<String> expirationDateParts = expirationDate.split("-");
+
+    message.expirationDate = DateTime(int.parse(expirationDateParts[2], radix: 10), int.parse(expirationDateParts[1], radix: 10), int.parse(expirationDateParts[0], radix: 10));
+    
     return message;
   }
 }

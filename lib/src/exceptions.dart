@@ -3,8 +3,13 @@ class HttpException implements Exception {
   String message;
 
   HttpException(this.statusCode, this.message);
+
+  @override
+  String toString() {
+    return "Status: ${statusCode}, message: ${message}";
+  }
 }
 
 class UnauthorizedException extends HttpException {
-    UnauthorizedException(message): super(statusCode, message);
+    UnauthorizedException(message): super(401, message);
 }
