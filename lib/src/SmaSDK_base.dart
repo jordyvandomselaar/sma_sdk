@@ -50,6 +50,10 @@ class SmaSDK {
       throw UnauthorizedException(messageResponse["message"]);
     }
 
+    if(response.statusCode == 422) {
+      throw ValidationException(messageResponse(["message"]));
+    }
+
     if(response.statusCode < 200 || response.statusCode > 299) {
       throw HttpException(response.statusCode, messageResponse["message"]);
     }

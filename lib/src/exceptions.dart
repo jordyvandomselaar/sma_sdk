@@ -13,3 +13,7 @@ class HttpException implements Exception {
 class UnauthorizedException extends HttpException {
     UnauthorizedException(message): super(401, message);
 }
+
+class ValidationException extends HttpException {
+    ValidationException(message): super(422, message);
+}

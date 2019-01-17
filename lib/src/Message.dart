@@ -4,8 +4,11 @@ class Message {
   String url;
   String password;
   DateTime expirationDate;
+  DateTime createdAt;
 
-  Message(this.message, this.email);
+  Message(this.message, this.email) {
+    this.createdAt = DateTime.now();
+  }
 
   Message.fromJson(Map<String, dynamic> json)
       : message = json["message"],
@@ -13,7 +16,8 @@ class Message {
         url = json["url"],
         password = json["password"],
         expirationDate = DateTime.fromMicrosecondsSinceEpoch(
-            json["expiration_date"]);
+            json["expiration_date"]),
+        createdAt = DateTime.fromMicrosecondsSinceEpoch(json["created_at"]);
 
   bool isExpired() {
     return DateTime.now().microsecondsSinceEpoch >
@@ -29,6 +33,7 @@ class Message {
         "email": email,
         "url": url,
         "password": password,
-        "expiration_date": expirationDate.microsecondsSinceEpoch
+        "expiration_date": expirationDate.microsecondsSinceEpoch,
+        "created_at": createdAt.microsecondsSinceEpoch
       };
 }
